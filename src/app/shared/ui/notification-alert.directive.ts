@@ -10,7 +10,7 @@ import { AlertController } from '@ionic/angular';
 @Directive({
   selector: 'app-notification-alert',
 })
-export class NotificationAlertComponent implements OnChanges {
+export class NotificationAlertDirective implements OnChanges {
   @Input() message!: string;
 
   constructor(private alertCtrl: AlertController) {}
@@ -25,7 +25,7 @@ export class NotificationAlertComponent implements OnChanges {
 }
 
 @NgModule({
-  declarations: [NotificationAlertComponent],
-  exports: [NotificationAlertComponent],
+  declarations: [NotificationAlertDirective],
+  exports: [NotificationAlertDirective],
 })
-export class NotificationAlertComponentModule {}
+export class NotificationAlertDirectiveModule {}

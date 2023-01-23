@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { PlayersService } from '../shared/data-access/players.service';
-import { NotificationAlertComponentModule } from '../shared/ui/notification-alert.component';
+import { NotificationAlertDirectiveModule } from '../shared/ui/notification-alert.directive';
 
 @Component({
   selector: 'app-home',
@@ -40,7 +40,7 @@ export class HomeComponent {
         component: HomeComponent,
       },
     ]),
-    NotificationAlertComponentModule,
+    NotificationAlertDirectiveModule,
   ],
 })
 export class HomeComponentModule {}
