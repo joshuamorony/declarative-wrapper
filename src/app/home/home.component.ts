@@ -1,9 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, NgModule } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  NgModule,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { AlertController, IonicModule } from '@ionic/angular';
+import { Subject, takeUntil } from 'rxjs';
 import { PlayersService } from '../shared/data-access/players.service';
-import { NotificationAlertComponentModule } from '../shared/ui/notification-alert.component';
 
 @Component({
   selector: 'app-home',
@@ -15,18 +21,33 @@ import { NotificationAlertComponentModule } from '../shared/ui/notification-aler
     </ion-header>
     <ion-content class="ion-padding">
       <p>You just lost</p>
-      <app-notification-alert
-        *ngIf="playersService.newPlayers$ | async as newPlayer"
-        message="A new challenger '{{ newPlayer.name }}' appears. Player ID: '{{
-          newPlayer.id
-        }}'"
-      ></app-notification-alert>
     </ion-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
-  constructor(public playersService: PlayersService) {}
+export class HomeComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    public playersService: PlayersService,
+    private alertCtrl: AlertController
+  ) {}
+
+  ngOnInit() {
+    this.playersService.newPlayers$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(async (newPlayer) => {
+        const alert = await this.alertCtrl.create({
+          message: `A new challenger '${newPlayer.name}' appears. Player ID: '${newPlayer.id}'`,
+        });
+
+        alert.present();
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+  }
 }
 
 @NgModule({
@@ -40,7 +61,6 @@ export class HomeComponent {
         component: HomeComponent,
       },
     ]),
-    NotificationAlertComponentModule,
   ],
 })
 export class HomeComponentModule {}
