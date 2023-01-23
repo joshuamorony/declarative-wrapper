@@ -5,9 +5,18 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PlayersService {
-  newPlayers$ = new Observable((observer) => {
-    setInterval(() => {
-      observer.next('Josh');
-    }, 5000);
-  });
+  newPlayers$: Observable<{ id: number; name: string }> = new Observable(
+    (observer) => {
+      let playerId = 0;
+
+      setInterval(() => {
+        playerId++;
+
+        observer.next({
+          id: playerId,
+          name: 'Josh',
+        });
+      }, 3000);
+    }
+  );
 }
