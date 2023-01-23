@@ -1,0 +1,7 @@
+{
+  "name": "imperative-to-declarative",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
